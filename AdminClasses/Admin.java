@@ -1,21 +1,39 @@
 package AdminClasses;
 
+import Gen.Person;
 import UserClasses.*;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Admin {
-    private String email;
-    private String password;
+public class Admin extends Person {
+    private static Admin instance;
     private ArrayList<Student> students;
     private ArrayList<Doctor> doctors;
 
-    public Admin() {
-        this.email = "admin@gmail.com";
-        this.password = "admin123";
+    private Admin() {
+        super("admin@gmail.com", "admin123");
         this.students = new ArrayList<>();
         this.doctors = new ArrayList<>();
+    }
+    public static Admin getInstance() {
+        if (instance == null) {
+            instance = new Admin();
+        }
+        return instance;
+    }
+    public boolean login(String email, String password) {
+        return this.getEmail().equals(email) && this.getPassword().equals(password);
+    }
+    @Override
+    public String getName() {
+        return "Admin";
+    }
+    private String getEmail() {
+        return this.email;
+    }
+    private String getPassword() {
+        return this.password;
     }
 
     public void addUser() {
@@ -37,14 +55,10 @@ public class Admin {
 
         switch(choice) {
             case 1:
-                Doctor doc = new Doctor(name, email, password);
-                doctors.add(doc);
-                System.out.println("Doctor added: " + doc.getName() + " (ID: " + doc.getID() + ")\n");
+                addDoctor(name, email, password);
                 break;
             case 2:
-                Student std = new Student(name, email, password);
-                students.add(std);
-                System.out.println("Student added: " + std.getName() + " (ID: " + std.getID() + ")\n");
+                addStudent(name, email, password);
                 break;
             default:
                 System.out.println("Invalid choice.");
@@ -58,9 +72,20 @@ public class Admin {
         System.out.println("2. Student");
     }
 
+    private void addDoctor(String name, String email, String password) {
+        Doctor doc = new Doctor(name, email, password);
+        doctors.add(doc);
+        System.out.println("Doctor added: " + doc.getName() + " (ID: " + doc.getID() + ")\n");
+    }
+    private void addStudent(String name, String email, String password) {
+        Student std = new Student(name, email, password);
+        students.add(std);
+        System.out.println("Student added: " + std.getName() + " (ID: " + std.getID() + ")\n");
+    }
+
     public void listStudents() {
         if (students.isEmpty()) {
-            System.out.println("No students available.");
+            System.out.println("No students available.\n");
         } else {
             for (Student std : students) {
                 System.out.println("ID: " + std.getID() + ", Name: " + std.getName() + ", Email: " + std.getEmail());
@@ -69,12 +94,19 @@ public class Admin {
     }
     public void listDoctors() {
         if (doctors.isEmpty()) {
-            System.out.println("No doctors available.");
+            System.out.println("No doctors available.\n");
         } else {
             for (Doctor doc : doctors) {
                 System.out.println("ID: " + doc.getID() + ", Name: " + doc.getName() + ", Email: " + doc.getEmail());
             }
         }
+    }
+
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+    public ArrayList<Doctor> getDoctors() {
+        return doctors;
     }
 
 }
