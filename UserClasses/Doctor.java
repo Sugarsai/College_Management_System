@@ -1,3 +1,5 @@
+package UserClasses;
+
 public class Doctor extends User {
     private static int doctorIdCounter = 169664;
     //protected ArrayList<Course> courses;

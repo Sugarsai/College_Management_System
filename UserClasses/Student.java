@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+package UserClasses;
 
 public class Student extends User {
     private static int studentIdCounter = 20220100;

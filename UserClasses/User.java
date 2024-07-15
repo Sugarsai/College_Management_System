@@ -1,3 +1,5 @@
+package UserClasses;
+
 import java.util.Scanner;
 
 public abstract class User {
@@ -54,6 +56,7 @@ public abstract class User {
                 break;
             default:
                 System.out.println("Invalid choice.");
+                return;
         }
     }
     private void editingMenu() {
