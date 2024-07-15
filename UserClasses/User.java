@@ -1,23 +1,24 @@
 package UserClasses;
 
+import Gen.Person;
+
 import java.util.Scanner;
 
-public abstract class User {
+public abstract class User extends Person {
     protected int ID;
     protected String name;
-    protected String email;
-    protected String password;
+    private boolean isLoggedIn;
 
     public User(String name, String email, String password) {
+        super(email, password);
         this.name = name;
-        this.email = email;
-        this.password = password;
     }
 
     public abstract void generateID();
     public int getID() {
         return ID;
     }
+    @Override
     public String getName() {
         return name;
     }
@@ -27,6 +28,29 @@ public abstract class User {
     public String getPassword() {
         return password;
     }
+
+    public boolean login() {
+        Scanner scanner = new Scanner(System.in);
+        int attempts = 3;
+
+        while (attempts > 0) {
+            System.out.print("Enter email: ");
+            String inputEmail = scanner.nextLine();
+            System.out.print("Enter password: ");
+            String inputPassword = scanner.nextLine();
+
+            if (this.email.equals(inputEmail) && this.password.equals(inputPassword)) {
+                isLoggedIn = true;
+                System.out.println("Login successful!");
+                return true;
+            } else {
+                attempts--;
+                System.out.println("Invalid email or password. Attempts remaining: " + attempts);
+            }
+        }
+        return false;
+    }
+
     public void editData() {
         Scanner scanner = new Scanner(System.in);
 
@@ -38,18 +62,15 @@ public abstract class User {
         switch (choice) {
             case 1:
                 System.out.print("Enter new name: ");
-                name = scanner.nextLine();
-                this.name = name;
+                this.name = scanner.nextLine();
                 break;
             case 2:
                 System.out.print("Enter new email: ");
-                email = scanner.nextLine();
-                this.email = email;
+                this.email  = scanner.nextLine();
                 break;
             case 3:
                 System.out.print("Enter new password: ");
-                password = scanner.nextLine();
-                this.password = password;
+                this.password = scanner.nextLine();
                 break;
             case 4:
                 System.out.print("Exiting editing menu... ");
