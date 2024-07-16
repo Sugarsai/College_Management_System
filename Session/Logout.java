@@ -12,7 +12,7 @@ public class Logout {
     }
 
     public void logout() {
-        System.out.println("Logging out " + currentUser.getName() + "...");
+        System.out.println("Logging out from " + currentUser.getName() + "...");
         currentUser = null;
     }
     public Person getCurrentUser() {

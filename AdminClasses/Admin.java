@@ -2,14 +2,15 @@ package AdminClasses;
 
 import Gen.Person;
 import UserClasses.*;
+import Menus.MenuPrinter;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Admin extends Person {
     private static Admin instance;
-    private ArrayList<Student> students;
-    private ArrayList<Doctor> doctors;
+    private final ArrayList<Student> students;
+    private final ArrayList<Doctor> doctors;
 
     private Admin() {
         super("admin@gmail.com", "admin123");
@@ -39,48 +40,34 @@ public class Admin extends Person {
     public void addUser() {
         Scanner scanner = new Scanner(System.in);
 
-        usersMenu();
+        MenuPrinter.addUserMenu();
 
         int choice = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.println("Enter User name: ");
-        String name = scanner.nextLine();
-
-        System.out.println("Enter Email: ");
-        String email = scanner.nextLine();
-
-        System.out.println("Enter Password: ");
-        String password = scanner.nextLine();
+        String[] data = MenuPrinter.dataInput();
 
         switch(choice) {
             case 1:
-                addDoctor(name, email, password);
+                addDoctor(data[0], data[1], data[2]);
                 break;
             case 2:
-                addStudent(name, email, password);
+                addStudent(data[0], data[1], data[2]);
                 break;
             default:
                 System.out.println("Invalid choice.");
-                return;
         }
 
     }
-    private void usersMenu() {
-        System.out.println("Select the type of user to add: ");
-        System.out.println("1. Doctor");
-        System.out.println("2. Student");
-    }
-
     private void addDoctor(String name, String email, String password) {
         Doctor doc = new Doctor(name, email, password);
         doctors.add(doc);
-        System.out.println("Doctor added: " + doc.getName() + " (ID: " + doc.getID() + ")\n");
+        System.out.println("Doctor added: " + doc.getName() + " (ID: " + doc.getID() + ")");
     }
     private void addStudent(String name, String email, String password) {
         Student std = new Student(name, email, password);
         students.add(std);
-        System.out.println("Student added: " + std.getName() + " (ID: " + std.getID() + ")\n");
+        System.out.println("Student added: " + std.getName() + " (ID: " + std.getID() + ")");
     }
 
     public void listStudents() {
@@ -107,6 +94,68 @@ public class Admin extends Person {
     }
     public ArrayList<Doctor> getDoctors() {
         return doctors;
+    }
+
+    public void removeUser() {
+        Scanner scanner = new Scanner(System.in);
+        boolean userRemoved = false;
+        int attempts = 0;
+
+        while (attempts < 3 && !userRemoved) {
+            System.out.print("Enter the ID of the user to remove: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            User userToRemove = null;
+
+            if ((userToRemove = findStudentById(id)) != null || (userToRemove = findDoctorById(id)) != null) {
+                System.out.println("Are you sure you want to delete the user with ID " + id + "? (yes/no): ");
+                String confirmation = scanner.nextLine();
+
+                if (confirmation.equalsIgnoreCase("yes")) {
+                    if (userToRemove instanceof Student) {
+                        removeStudent((Student) userToRemove, id);
+                    } else if (userToRemove instanceof Doctor) {
+                        removeDoctor((Doctor) userToRemove, id);
+                    }
+                    userRemoved = true;
+                } else {
+                    System.out.println("User removal canceled.");
+                    userRemoved = true;
+                }
+            } else {
+                attempts++;
+                System.out.println("No user found with ID " + id + ". Attempts remaining: " + (3 - attempts) + "\n");
+            }
+        }
+
+        if (!userRemoved) {
+            System.out.println("Failed to remove user after 3 attempts.");
+        }
+    }
+    private Student findStudentById(int id) {
+        for (Student student : students) {
+            if (student.getID() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+    private Doctor findDoctorById(int id) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getID() == id) {
+                return doctor;
+            }
+        }
+        return null;
+    }
+    private void removeStudent(Student userToRemove, int id) {
+        students.remove(userToRemove);
+        System.out.println("Student with ID " + id + " has been removed.");
+    }
+    private void removeDoctor(Doctor userToRemove, int id) {
+        doctors.remove(userToRemove);
+        System.out.println("Doctor with ID " + id + " has been removed.");
     }
 
 }
