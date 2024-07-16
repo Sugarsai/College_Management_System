@@ -1,5 +1,7 @@
 package UserClasses;
 
+import Menus.MenuPrinter;
+
 public class Doctor extends User {
     private static int doctorIdCounter = 169664;
     //protected ArrayList<Course> courses;
@@ -13,6 +15,7 @@ public class Doctor extends User {
     public void generateID() {
         this.ID = doctorIdCounter++;
     }
+
     // I made all of them void until the implementation
     public void addAssignment() {}
     public void removeAssignment() {}
