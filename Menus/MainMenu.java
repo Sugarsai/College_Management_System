@@ -1,4 +1,4 @@
-package MainMenu;
+package Menus;
 
 import AdminClasses.*;
 import Gen.Person;
@@ -7,15 +7,14 @@ import Session.*;
 
 import java.util.Scanner;
 
-public class Menu {
-    private Scanner scanner;
-    private Logout logout;
+public class MainMenu {
+    private static Scanner scanner = new Scanner(System.in);
+    private static Logout logout;
 
-    public Menu() {
-        this.scanner = new Scanner(System.in);
+    public MainMenu() {
     }
 
-    public void start() {
+    public static void start() {
         Login login = new Login();
 
         Person user = null;
@@ -34,11 +33,11 @@ public class Menu {
             displayDoctorMenu((Doctor) user);
         }
 
-        System.out.println("Logged out successfully.");
+        System.out.println("Logged out successfully.\n");
         start();
     }
 
-    public void displayAdminMenu(Admin admin) {
+    public static void displayAdminMenu(Admin admin) {
         int choice = 0;
         while (choice != 6) {
             System.out.println("\nAdmin Menu");
@@ -51,7 +50,7 @@ public class Menu {
 
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
-            scanner.nextLine();  // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -67,7 +66,7 @@ public class Menu {
                     //View Courses
                     break;
                 case 5:
-                    //Remove User
+                    admin.removeUser();
                     break;
                 case 6:
                     logout = new Logout(admin);
@@ -79,15 +78,16 @@ public class Menu {
         }
     }
 
-    public void displayStudentMenu(Student student) {
+    public static void displayStudentMenu(Student student) {
         int choice = 0;
         while (choice != 5) {
             System.out.println("\nStudent Menu");
             System.out.println("1. Register in Courses");
             System.out.println("2. List My Courses");
             System.out.println("3. View a Course");
-            System.out.println("4. Get Grades Report");
-            System.out.println("5. Log out");
+            System.out.println("4. Edit Profile");
+            System.out.println("5. Get Grades Report");
+            System.out.println("6. Log out");
 
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
@@ -104,19 +104,22 @@ public class Menu {
                     // View a Course
                     break;
                 case 4:
-                    // Get Grades Report
+                    student.editProfile();
                     break;
                 case 5:
+                    // Get Grades Report
+                    break;
+                case 6:
                     logout = new Logout(student);
-                    logout.logout(); // Logout when option 5 is selected
-                    return; // Exit the method
+                    logout.logout();
+                    return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
     }
 
-    public void displayDoctorMenu(Doctor doctor) {
+    public static void displayDoctorMenu(Doctor doctor) {
         int choice = 0;
         while (choice != 3) {
             System.out.println("\nDoctor Menu");

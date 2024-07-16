@@ -1,13 +1,7 @@
-import UserClasses.*;
-import AdminClasses.*;
-import MainMenu.*;
-
-import java.util.ArrayList;
-import java.util.Scanner;
+import Menus.*;
 
 public class Main {
     public static void main(String[] args) {
-        Menu menu = new Menu();
-        menu.start();
+        MainMenu.start();
     }
 }
